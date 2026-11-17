@@ -25,4 +25,5 @@ export function ArticleListItem({ article }: ArticleListItemProps) {
       </div>
     </Link>
   )
+
 }
