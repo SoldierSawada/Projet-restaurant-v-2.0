@@ -1,6 +1,6 @@
 # Restaurant
 
-![CI](https://github.com/SoldierSawada/Projet-restaurant-v-2.0/actions/workflows/ci-cd.yml/badge.svg)
+![CI](https://github.com/SoldierSawada/Projet-restaurant-v-2.0/actions/workflows/ci.yml/badge.svg)
 
 Projet composé de deux applications :
 
