@@ -95,5 +95,33 @@ jobs:
           context: ${{ matrix.project }}
           push: ${{ github.event_name == 'push' }}
           build-args: |
-            VITE_API_URL=http://localhost:3001
-          tags: ${{ env.IMAGE }}:latest
+            VITE_API_URL=${{ vars.VITE_API_URL || 'http://localhost:3001' }}
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+
+  deploy:
+    needs: docker
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: production
+      cancel-in-progress: false
+    steps:
+      - uses: appleboy/ssh-action@v1.0.3
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          envs: GITHUB_SHA
+          script: |
+            set -e
+            cd /opt/restaurant
+            git fetch origin
+            git checkout -f "$GITHUB_SHA"
+            export IMAGE_TAG="$GITHUB_SHA"
+            docker compose -f docker-compose.deploy.yml --env-file .env.deploy pull
+            docker compose -f docker-compose.deploy.yml --env-file .env.deploy up -d
+            docker image prune -f

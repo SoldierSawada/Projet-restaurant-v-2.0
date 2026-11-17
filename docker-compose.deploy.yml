@@ -1,0 +1,22 @@
+services:
+  backend:
+    image: ${GHCR_PREFIX:?GHCR_PREFIX manquant}/backend:${IMAGE_TAG:?IMAGE_TAG manquant}
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    env_file:
+      - .env.deploy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:3000/status"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  frontend:
+    image: ${GHCR_PREFIX:?GHCR_PREFIX manquant}/frontend:${IMAGE_TAG:?IMAGE_TAG manquant}
+    restart: unless-stopped
+    ports:
+      - "80:8080"
+    depends_on:
+      backend:
+        condition: service_healthy

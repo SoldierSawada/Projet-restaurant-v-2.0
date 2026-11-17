@@ -1,0 +1,9 @@
+services:
+  backend:
+    image: ghcr.io/soldiersawada/projet-restaurant-v-2.0/backend:latest
+    build: !reset null
+    env_file:
+      - .env.aws
+    environment:
+      - DB_HOST=${DB_HOST}
+    depends_on: !reset []
