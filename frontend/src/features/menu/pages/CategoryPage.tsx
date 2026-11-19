@@ -24,6 +24,7 @@ export function CategoryPage() {
   return (
     <div className="flex flex-col gap-4">
       <Breadcrumbs items={[{ label: 'Carte', to: '/carte' }, { label: category.label }]} />
+      <h1 className="text-2xl font-bold">{category.label}</h1>
       <MarkdownRenderer content={category.intro} className="text-slate-600 dark:text-slate-300" />
       <SearchInput value={search} onChange={setSearch} placeholder="Rechercher un plat..." />
 

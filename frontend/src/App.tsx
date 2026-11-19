@@ -44,9 +44,6 @@ const adminMenuPage = lazy(() =>
     default: loaded.AdminMenuPage,
   })),
 )
-const carteHomePage = lazy(() =>
-  import('@/features/menu/pages/CarteHomePage').then((loaded) => ({ default: loaded.CarteHomePage })),
-)
 const categoryPage = lazy(() =>
   import('@/features/menu/pages/CategoryPage').then((loaded) => ({ default: loaded.CategoryPage })),
 )
@@ -133,7 +130,7 @@ export function App() {
         </Route>
 
         <Route path="/carte" element={createElement(cartePage)}>
-          <Route index element={createElement(carteHomePage)} />
+          <Route index element={null} />
           <Route path=":category" element={createElement(categoryPage)} />
           <Route path=":category/:dishId" element={createElement(dishDetailPage)} />
         </Route>

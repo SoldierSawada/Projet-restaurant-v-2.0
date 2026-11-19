@@ -24,6 +24,11 @@ export const menuCategories = [
     label: 'Desserts',
     intro: 'Terminez le repas en douceur avec nos desserts **faits maison**, à base de fruits des Vosges.',
   },
+  {
+    slug: 'digestif',
+    label: 'Digestif',
+    intro: "Un **digestif** de fruits d'**Alsace** pour finir le repas, servi bien frais.",
+  },
 ] as const
 
 export type MenuCategorySlug = (typeof menuCategories)[number]['slug']

@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { InvalidMenuItemError } from '../errors/InvalidMenuItemError';
 
-export const menuCategorySlugs = ['boissons', 'vins', 'entrees', 'plats', 'desserts'];
+export const menuCategorySlugs = ['boissons', 'vins', 'entrees', 'plats', 'desserts', 'digestif'];
 
 export interface MenuItemInput {
   title: string;

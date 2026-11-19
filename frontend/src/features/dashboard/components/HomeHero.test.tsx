@@ -17,6 +17,12 @@ describe('HomeHero', () => {
     expect(screen.getByRole('link', { name: 'Découvrir la carte' })).toHaveAttribute('href', '/carte')
   })
 
+  it('happy : affiche deux images décoratives masquées aux lecteurs d\'écran', () => {
+    const { container } = renderWithProviders(<HomeHero />)
+
+    expect(container.querySelectorAll('img[aria-hidden="true"]')).toHaveLength(2)
+  })
+
   it('death : ne propose ni bouton ni lien de connexion', () => {
     renderWithProviders(<HomeHero />)
 

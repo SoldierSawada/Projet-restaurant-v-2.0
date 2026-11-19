@@ -120,6 +120,10 @@ describe('Produits de la carte', () => {
     expect(() => MenuItem.create({ ...validMenuItem, category: 'desserts-glacés' })).toThrow(InvalidMenuItemError);
   });
 
+  test('un produit accepte la catégorie digestif', () => {
+    expect(MenuItem.create({ ...validMenuItem, category: 'digestif' }).props.category).toBe('digestif');
+  });
+
   test.each([0, -1, 1000, 6.456])('un produit refuse le prix %s', (price) => {
     expect(() => MenuItem.create({ ...validMenuItem, price })).toThrow(InvalidMenuItemError);
   });

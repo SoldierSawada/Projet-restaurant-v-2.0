@@ -8,20 +8,21 @@ describe('CarteTabs', () => {
     renderWithProviders(<CarteTabs />, { route: '/carte' })
 
     const nav = screen.getByRole('navigation', { name: 'Catégories de la carte' })
-    expect(within(nav).getAllByRole('link')).toHaveLength(5)
+    expect(within(nav).getAllByRole('link')).toHaveLength(6)
     expect(within(nav).getByRole('link', { name: 'Plats' })).toHaveAttribute('href', '/carte/plats')
+    expect(within(nav).getByRole('link', { name: 'Digestif' })).toHaveAttribute('href', '/carte/digestif')
   })
 
   it('happy : met en évidence la catégorie active', () => {
     renderWithProviders(<CarteTabs />, { route: '/carte/plats' })
 
-    expect(screen.getByRole('link', { name: 'Plats' })).toHaveClass('bg-bordeaux')
-    expect(screen.getByRole('link', { name: 'Vins' })).not.toHaveClass('bg-bordeaux')
+    expect(screen.getByRole('link', { name: 'Plats' })).toHaveAttribute('aria-current', 'page')
+    expect(screen.getByRole('link', { name: 'Vins' })).not.toHaveAttribute('aria-current')
   })
 
   it('death : n\'active aucune catégorie sur une route qui n\'en fait pas partie', () => {
     const { container } = renderWithProviders(<CarteTabs />, { route: '/blog' })
 
-    expect(container.querySelectorAll('.bg-bordeaux')).toHaveLength(0)
+    expect(container.querySelectorAll('[aria-current="page"]')).toHaveLength(0)
   })
 })
