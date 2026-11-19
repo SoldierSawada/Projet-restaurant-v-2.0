@@ -22,11 +22,13 @@ import { MenuModule } from '../modules/menu/MenuModule';
 import { seedAdmin } from './SeedAdmin';
 import { seedContent } from './SeedContent';
 import { NotificationHub } from '../modules/notification/NotificationHub';
+import { metricsHandler, metricsMiddleware } from '../metrics';
 
 export async function setup(app: Application, server: Server): Promise<Application> {
   app.use(express.json());
   app.use(morgan('dev'));
   app.use(cors());
+  app.use(metricsMiddleware);
 
   const container = await new AppKernel().setup();
   useContainer(container);
@@ -47,6 +49,8 @@ export async function setup(app: Application, server: Server): Promise<Applicati
   app.get('/status', (_req: Request, res: Response) => {
     res.sendStatus(200);
   });
+
+  app.get('/metrics', metricsHandler);
 
   useExpressServer(app, {
     routePrefix: '/restaurant',
