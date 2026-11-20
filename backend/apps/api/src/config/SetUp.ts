@@ -1,7 +1,6 @@
 import { Server } from 'http';
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-import morgan from 'morgan';
 import { useContainer, useExpressServer } from 'routing-controllers';
 import { AppKernel } from './AppKernel';
 import { DomainErrorMiddleware } from '../middlewares/DomainErrorMiddleware';
@@ -23,10 +22,11 @@ import { seedAdmin } from './SeedAdmin';
 import { seedContent } from './SeedContent';
 import { NotificationHub } from '../modules/notification/NotificationHub';
 import { metricsHandler, metricsMiddleware } from '../metrics';
+import { httpLogger } from '../infrastructure/logging/http-logger';
 
 export async function setup(app: Application, server: Server): Promise<Application> {
+  app.use(httpLogger);
   app.use(express.json());
-  app.use(morgan('dev'));
   app.use(cors());
   app.use(metricsMiddleware);
 

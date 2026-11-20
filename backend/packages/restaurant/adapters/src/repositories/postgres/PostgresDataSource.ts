@@ -9,7 +9,7 @@ import { ReviewEntity } from './entities/ReviewEntity';
 import { SessionEntity } from './entities/SessionEntity';
 import { TableEntity } from './entities/TableEntity';
 
-export const POSTGRES_ENTITIES = [
+export const postgresEntities = [
   MemberEntity,
   ReservationEntity,
   TableEntity,
@@ -41,7 +41,7 @@ export function createPostgresDataSource(config: PostgresConfig): DataSource {
     database: config.database,
     synchronize: config.synchronize,
     logging: config.logging ?? false,
-    entities: POSTGRES_ENTITIES,
+    entities: postgresEntities,
   };
 
   return new DataSource(options);

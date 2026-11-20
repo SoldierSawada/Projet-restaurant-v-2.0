@@ -1,6 +1,6 @@
 import { InvalidEmailError } from '../errors/InvalidEmailError';
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Value Object : une adresse email valide, normalisée et immuable.
 export class Email {
@@ -15,7 +15,7 @@ export class Email {
 
     const normalized = raw.trim().toLowerCase();
 
-    if (normalized.length === 0 || !EMAIL_PATTERN.test(normalized)) {
+    if (normalized.length === 0 || !emailPattern.test(normalized)) {
       throw new InvalidEmailError(raw);
     }
 

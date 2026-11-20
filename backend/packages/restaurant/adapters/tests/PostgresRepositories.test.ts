@@ -24,7 +24,7 @@ import {
 } from 'restaurant-core';
 import {
   Build,
-  POSTGRES_ENTITIES,
+  postgresEntities,
   PostgresMemberRepository,
   PostgresReservationRepository,
   PostgresTableRepository,
@@ -47,7 +47,7 @@ async function createDataSource(): Promise<DataSource> {
 
   const dataSource: DataSource = await db.adapters.createTypeormDataSource({
     type: 'postgres',
-    entities: POSTGRES_ENTITIES,
+    entities: postgresEntities,
     synchronize: true,
   });
   await dataSource.initialize();

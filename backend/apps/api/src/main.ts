@@ -2,6 +2,10 @@ import 'reflect-metadata';
 import { createServer } from 'http';
 import express from 'express';
 import { setup } from './config/SetUp';
+import { logger } from './infrastructure/logging/logger';
+import { initSentry } from './infrastructure/monitoring/sentry';
+
+initSentry();
 
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 
@@ -12,8 +16,9 @@ const server = createServer(app);
   await setup(app, server);
 
   server.listen(port, () => {
-    console.log(
-      `[ ready ] Restaurant API sur http://localhost:${port}/restaurant`,
-    );
+    logger.info('Serveur démarré', {
+      port,
+      url: `http://localhost:${port}/restaurant`,
+    });
   });
 })();

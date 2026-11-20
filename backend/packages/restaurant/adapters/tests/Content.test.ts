@@ -23,7 +23,7 @@ import {
   MenuItemNotFoundError,
   MenuItemRepository,
 } from 'restaurant-core';
-import { Build, POSTGRES_ENTITIES } from 'restaurant-adapters';
+import { Build, postgresEntities } from 'restaurant-adapters';
 
 const validArticle = {
   title: 'Choucroute garnie',
@@ -190,7 +190,7 @@ async function createDataSource(): Promise<DataSource> {
 
   const dataSource: DataSource = await db.adapters.createTypeormDataSource({
     type: 'postgres',
-    entities: POSTGRES_ENTITIES,
+    entities: postgresEntities,
   });
   await dataSource.initialize();
   await dataSource.synchronize();

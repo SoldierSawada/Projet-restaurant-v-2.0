@@ -2,7 +2,8 @@ import { ExpressErrorMiddlewareInterface, HttpError, Middleware } from 'routing-
 import { injectable } from 'inversify';
 import { NextFunction, Request, Response } from 'express';
 import { DomainError } from 'ddd';
-
+import { logger } from '../infrastructure/logging/logger';
+import { captureError } from '../infrastructure/monitoring/sentry';
 
 
 @Middleware({ type: 'after' })
@@ -28,7 +29,8 @@ export class DomainErrorMiddleware implements ExpressErrorMiddlewareInterface {
       return;
     }
 
-    console.error(error);
+    logger.error('Erreur interne du serveur', { error });
+    captureError(error);
     response.status(500).json({ error: 'InternalServerError' });
   }
 }

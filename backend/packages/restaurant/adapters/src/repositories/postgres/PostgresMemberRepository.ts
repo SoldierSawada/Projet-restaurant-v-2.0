@@ -6,7 +6,7 @@ import { DatabaseIdentifiers } from './DatabaseIdentifiers';
 import { MemberEntity } from './entities/MemberEntity';
 import { MemberMapper } from './mappers/MemberMapper';
 
-const UNIQUE_VIOLATION = '23505';
+const uniqueViolation = '23505';
 
 @injectable()
 export class PostgresMemberRepository implements MemberRepository {
@@ -23,7 +23,7 @@ export class PostgresMemberRepository implements MemberRepository {
       // Deux inscriptions simultanées avec le même email : la contrainte UNIQUE tranche.
       if (
         error instanceof QueryFailedError &&
-        (error.driverError as { code?: string } | undefined)?.code === UNIQUE_VIOLATION
+        (error.driverError as { code?: string } | undefined)?.code === uniqueViolation
       ) {
         throw new EmailAlreadyUsedError(member.email.value);
       }

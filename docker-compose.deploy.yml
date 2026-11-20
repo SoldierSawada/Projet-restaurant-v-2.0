@@ -6,6 +6,11 @@ services:
       - "127.0.0.1:3001:3000"
     env_file:
       - .env.deploy
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     healthcheck:
       test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:3000/status"]
       interval: 10s

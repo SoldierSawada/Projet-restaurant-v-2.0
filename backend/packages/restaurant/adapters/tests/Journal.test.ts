@@ -16,7 +16,7 @@ import {
   Review,
   ReviewRepository,
 } from 'restaurant-core';
-import { Build, POSTGRES_ENTITIES } from 'restaurant-adapters';
+import { Build, postgresEntities } from 'restaurant-adapters';
 
 function articleInput(title: string, content = 'Texte') {
   return { title, category: 'Recettes', excerpt: 'Résumé', author: 'Léa', content };
@@ -37,7 +37,7 @@ async function createDataSource(): Promise<DataSource> {
 
   const dataSource: DataSource = await db.adapters.createTypeormDataSource({
     type: 'postgres',
-    entities: POSTGRES_ENTITIES,
+    entities: postgresEntities,
     synchronize: true,
   });
   await dataSource.initialize();

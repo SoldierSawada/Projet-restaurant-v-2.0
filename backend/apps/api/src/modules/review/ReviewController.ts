@@ -10,6 +10,7 @@ import {
 } from 'restaurant-core';
 
 import { ReviewPageQuery, SubmitReviewCommand } from './command/ReviewCommand';
+import { logger } from '../../infrastructure/logging/logger';
 import { AuthenticationMiddleware } from '../../middlewares/AuthenticationMiddleware';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 
@@ -82,6 +83,12 @@ export class ReviewController {
       action: result.created ? 'REVIEW_CREATED' : 'REVIEW_UPDATED',
       memberId: request.identity.memberId,
       details: result.id,
+    });
+
+    logger.info('Avis enregistré', {
+      memberId: request.identity.memberId,
+      reviewId: result.id,
+      created: result.created,
     });
 
     return { id: result.id, created: result.created };

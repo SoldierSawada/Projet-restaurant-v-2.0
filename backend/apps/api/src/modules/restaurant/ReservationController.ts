@@ -17,6 +17,7 @@ import {
   ListTables,
   RecordActivity,
 } from 'restaurant-core';
+import { logger } from '../../infrastructure/logging/logger';
 import {
   AvailableTablesQuery,
   CreateReservationCommand,
@@ -101,6 +102,12 @@ export class ReservationController {
       details: reservationId,
     });
 
+    logger.info('Réservation créée', {
+      memberId: request.identity.memberId,
+      reservationId,
+      guestCount: Number(command.guestCount),
+    });
+
     this.notificationHub.sendToMember(request.identity.memberId, {
       type: 'RESERVATION_CONFIRMED',
       title: 'Réservation confirmée',
@@ -126,6 +133,11 @@ export class ReservationController {
       guestPhone: command.guestPhone,
     });
 
+    logger.info('Réservation sans compte créée', {
+      reservationId,
+      guestCount: Number(command.guestCount),
+    });
+
     return { id: reservationId };
   }
 
@@ -141,6 +153,8 @@ export class ReservationController {
       memberId,
       details: reservationId,
     });
+
+    logger.info('Réservation annulée', { memberId, reservationId });
 
     this.notificationHub.sendToMember(memberId, {
       type: 'RESERVATION_ANNULEE',

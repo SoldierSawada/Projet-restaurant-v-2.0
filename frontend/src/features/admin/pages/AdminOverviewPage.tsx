@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { createElement, lazy, Suspense } from 'react'
 import { CalendarCheck, CalendarClock, Star, Table2, Users } from 'lucide-react'
 import { StatCard } from '@/features/admin/components/StatCard'
 import { useAdminDashboard } from '@/features/admin/hooks/useAdminDashboard'
@@ -6,7 +6,7 @@ import { Skeleton } from '@/shared'
 
 const averageFormatOptions = { minimumFractionDigits: 1, maximumFractionDigits: 1 }
 
-const ReservationsChart = lazy(() =>
+const reservationsChart = lazy(() =>
   import('@/features/admin/components/ReservationsChart').then((loaded) => ({
     default: loaded.ReservationsChart,
   })),
@@ -69,7 +69,7 @@ export function AdminOverviewPage() {
       <section className="flex flex-col gap-4 rounded-none border border-slate-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md dark:border-slate-700 dark:bg-slate-900">
         <h2 className="text-lg font-bold">Réservations des 14 prochains jours</h2>
         <Suspense fallback={<Skeleton variant="bar" className="h-72" />}>
-          <ReservationsChart />
+          {createElement(reservationsChart)}
         </Suspense>
       </section>
     </div>

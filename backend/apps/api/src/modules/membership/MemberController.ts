@@ -28,6 +28,7 @@ import {
   RegisterMemberCommand,
   UpdateProfileCommand,
 } from './command/MemberCommand';
+import { logger } from '../../infrastructure/logging/logger';
 import { AuthenticationMiddleware } from '../../middlewares/AuthenticationMiddleware';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { toReservationResponse } from '../restaurant/ReservationResponse';
@@ -109,6 +110,8 @@ export class MemberController {
       newPassword: command.newPassword,
     });
 
+    logger.info('Mot de passe modifié', { memberId });
+
     return { changed: true };
   }
 
@@ -126,18 +129,34 @@ export class MemberController {
       details: 'Nouveau membre inscrit',
     });
 
+    logger.info('Membre inscrit', { memberId });
+
     return { id: memberId };
   }
 
   @Post('/login')
   async login(@Body() command: LoginCommand) {
-    return this.loginMember.execute({ email: command.email, password: command.password });
+    try {
+      const session = await this.loginMember.execute({ email: command.email, password: command.password });
+
+      logger.info('Connexion réussie', { memberId: session.memberId });
+
+      return session;
+    } catch (error) {
+      logger.warn('Échec de connexion', {
+        reason: error instanceof Error ? error.name : 'ErreurInconnue',
+      });
+
+      throw error;
+    }
   }
 
   @Post('/logout')
   @UseBefore(AuthenticationMiddleware)
   async logout(@Req() request: AuthenticatedRequest) {
     await this.logoutMember.execute({ token: request.identity.token });
+
+    logger.info('Déconnexion', { memberId: request.identity.memberId });
 
     return { loggedOut: true };
   }

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 export function HomeHero() {
   return (
     <section className="bg-creme px-4 py-16 sm:py-24 dark:bg-slate-900">
-      <div className="mx-auto flex w-full max-w-6xl items-start gap-10">
+      <div className="mx-auto flex w-full max-w-[1360px] items-start gap-10">
         <img
           src="/images/accueil/verres-vin.webp"
           alt=""
@@ -42,7 +42,7 @@ export function HomeHero() {
           src="/images/accueil/maison-aquarelle.webp"
           alt=""
           aria-hidden="true"
-          className="hidden h-[260px] w-[260px] shrink-0 object-contain lg:block"
+          className="hidden h-[260px] w-[260px] shrink-0 object-contain lg:block xl:h-[420px] xl:w-[420px] xl:self-center"
         />
       </div>
     </section>
