@@ -44,7 +44,7 @@ jobs:
       group: staging
       cancel-in-progress: false
     steps:
-      - uses: appleboy/ssh-action@v1.0.3
+      - uses: appleboy/ssh-action@v1.2.5
         env:
           GITHUB_SHA: ${{ github.sha }}
         with:
@@ -70,7 +70,7 @@ jobs:
       group: production
       cancel-in-progress: false
     steps:
-      - uses: appleboy/ssh-action@v1.0.3
+      - uses: appleboy/ssh-action@v1.2.5
         env:
           GITHUB_SHA: ${{ github.sha }}
         with:
