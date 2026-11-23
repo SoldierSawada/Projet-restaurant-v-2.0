@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { Container } from 'inversify';
 import { BookingIdentifiers, Email, Member, MemberRepository, PasswordHasher } from 'restaurant-core';
+import { readSecret } from './Secrets';
 
 const defaultAdminEmail = 'admin@restaurant.fr';
 const defaultAdminPassword = 'Responsable2026';
@@ -17,7 +18,7 @@ export async function seedAdmin(container: Container, env: NodeJS.ProcessEnv = p
     return;
   }
 
-  const passwordHash = await passwordHasher.hash(env.ADMIN_PASSWORD ?? defaultAdminPassword);
+  const passwordHash = await passwordHasher.hash(readSecret('ADMIN_PASSWORD', env) ?? defaultAdminPassword);
 
   const admin = Member.reconstitute({
     id: randomUUID(),

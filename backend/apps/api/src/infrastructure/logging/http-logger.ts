@@ -1,5 +1,5 @@
+import { randomUUID } from 'node:crypto';
 import { NextFunction, Request, Response } from 'express';
-import { v4 as uuidv4 } from 'uuid';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { logger, requestContext } from './logger';
 
@@ -21,7 +21,7 @@ function levelForStatus(status: number): 'info' | 'warn' | 'error' {
 
 export function httpLogger(req: Request, res: Response, next: NextFunction): void {
   const incomingId = req.header('X-Request-Id');
-  const requestId = incomingId && validRequestId.test(incomingId) ? incomingId : uuidv4();
+  const requestId = incomingId && validRequestId.test(incomingId) ? incomingId : randomUUID();
   const startedAt = process.hrtime.bigint();
 
   res.setHeader('X-Request-Id', requestId);

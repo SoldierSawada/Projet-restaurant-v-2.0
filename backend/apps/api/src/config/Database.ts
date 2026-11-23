@@ -1,4 +1,5 @@
 import { PostgresConfig } from 'restaurant-adapters';
+import { readSecret } from './Secrets';
 
 export type PersistenceMode = 'memory' | 'postgres';
 
@@ -12,7 +13,7 @@ export function postgresConfigFromEnv(env: NodeJS.ProcessEnv = process.env): Pos
     host: env.DB_HOST ?? 'localhost',
     port: env.DB_PORT ? Number(env.DB_PORT) : 5432,
     username: env.DB_USERNAME ?? 'restaurant',
-    password: env.DB_PASSWORD ?? 'restaurant',
+    password: readSecret('DB_PASSWORD', env) ?? 'restaurant',
     database: env.DB_NAME ?? 'restaurant',
     synchronize: env.DB_SYNCHRONIZE !== 'false',
     logging: env.DB_LOGGING === 'true',
