@@ -1,4 +1,4 @@
-FROM node:20-alpine AS development
+FROM node:26-alpine AS development
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
@@ -7,14 +7,14 @@ RUN chown -R node:node /app
 USER node
 EXPOSE 3000
 
-FROM node:20-alpine AS build
+FROM node:26-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM node:20-alpine AS production
+FROM node:26-alpine AS production
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
