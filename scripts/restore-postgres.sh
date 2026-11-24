@@ -1,5 +1,6 @@
 #!/bin/bash
 set -euo pipefail
+umask 077
 
 if [ "$#" -ne 2 ]; then
   echo "Usage : restore-postgres.sh <fichier.sql.gz> <nom_base_cible>" >&2
@@ -28,7 +29,7 @@ run_pg() {
     --env-file "$env_file" \
     -e "TARGET_DB=$target_db" \
     -v "$secrets_dir/db_password.txt:/run/secrets/db_password:ro" \
-    postgres:16-alpine \
+    postgres:18-alpine \
     sh -c "export PGPASSWORD=\"\$(cat /run/secrets/db_password)\"; $1"
 }
 

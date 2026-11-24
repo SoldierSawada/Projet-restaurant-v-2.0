@@ -1,5 +1,6 @@
 #!/bin/bash
 set -euo pipefail
+umask 077
 
 env_file="${ENV_FILE:-/opt/restaurant/.env.deploy}"
 secrets_dir="${SECRETS_DIR:-/opt/restaurant/secrets}"
@@ -14,7 +15,7 @@ file="$backup_dir/restaurant-$(date +%Y%m%d-%H%M%S)-$$.sql.gz"
 if ! docker run --rm --network host \
   --env-file "$env_file" \
   -v "$secrets_dir/db_password.txt:/run/secrets/db_password:ro" \
-  postgres:16-alpine \
+  postgres:18-alpine \
   sh -c 'PGPASSWORD="$(cat /run/secrets/db_password)" pg_dump -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME" "$DB_NAME"' \
   | gzip > "$file"; then
   rm -f "$file"
