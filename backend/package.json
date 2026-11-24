@@ -39,7 +39,7 @@
     "tsc-alias": "^1.9.10",
     "tsconfig-paths": "^4.2.0",
     "typescript": "~5.4.2",
-    "vitest": "^4.1.10"
+    "vitest": "^5.1.1"
   },
   "overrides": {
     "body-parser": "^1.20.9",
