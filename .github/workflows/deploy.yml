@@ -47,12 +47,6 @@ jobs:
       group: staging
       cancel-in-progress: false
     steps:
-      - name: Diagnostic OIDC (temporaire)
-        run: |
-          TOKEN=$(curl -sS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" | jq -r .value)
-          PAYLOAD=$(echo "$TOKEN" | cut -d. -f2 | tr '_-' '/+')
-          while [ $(( ${#PAYLOAD} % 4 )) -ne 0 ]; do PAYLOAD="$PAYLOAD="; done
-          echo "$PAYLOAD" | base64 -d | jq '{sub, aud, repository, environment}'
       - uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
@@ -62,7 +56,7 @@ jobs:
           INSTANCE_ID: ${{ secrets.AWS_INSTANCE_ID }}
           GITHUB_SHA: ${{ github.sha }}
         run: |
-          CMD="set -e; cd /opt/restaurant; git fetch origin; git checkout -f $GITHUB_SHA; export IMAGE_TAG=$GITHUB_SHA; docker compose -p restaurant-staging -f docker-compose.deploy.yml -f docker-compose.staging.yml --env-file .env.deploy pull && docker compose -p restaurant-staging -f docker-compose.deploy.yml -f docker-compose.staging.yml --env-file .env.deploy up -d && docker compose -p restaurant-staging -f docker-compose.deploy.yml -f docker-compose.staging.yml --env-file .env.deploy ps"
+          CMD="sudo -u ubuntu -H bash -c 'set -e; cd /opt/restaurant; git fetch origin; git checkout -f $GITHUB_SHA; export IMAGE_TAG=$GITHUB_SHA; docker compose -p restaurant-staging -f docker-compose.deploy.yml -f docker-compose.staging.yml --env-file .env.deploy pull && docker compose -p restaurant-staging -f docker-compose.deploy.yml -f docker-compose.staging.yml --env-file .env.deploy up -d && docker compose -p restaurant-staging -f docker-compose.deploy.yml -f docker-compose.staging.yml --env-file .env.deploy ps'"
           CID=$(aws ssm send-command --instance-ids "$INSTANCE_ID" --document-name AWS-RunShellScript --parameters "{\"commands\":[\"$CMD\"]}" --query Command.CommandId --output text)
           STATUS=Pending
           for i in $(seq 1 90); do
@@ -93,7 +87,7 @@ jobs:
           INSTANCE_ID: ${{ secrets.AWS_INSTANCE_ID }}
           GITHUB_SHA: ${{ github.sha }}
         run: |
-          CMD="set -e; cd /opt/restaurant; git fetch origin; git checkout -f $GITHUB_SHA; export IMAGE_TAG=$GITHUB_SHA; docker compose -f docker-compose.deploy.yml --env-file .env.deploy pull && docker compose -f docker-compose.deploy.yml --env-file .env.deploy up -d && docker compose -f docker-compose.deploy.yml --env-file .env.deploy ps && docker image prune -f"
+          CMD="sudo -u ubuntu -H bash -c 'set -e; cd /opt/restaurant; git fetch origin; git checkout -f $GITHUB_SHA; export IMAGE_TAG=$GITHUB_SHA; docker compose -f docker-compose.deploy.yml --env-file .env.deploy pull && docker compose -f docker-compose.deploy.yml --env-file .env.deploy up -d && docker compose -f docker-compose.deploy.yml --env-file .env.deploy ps && docker image prune -f'"
           CID=$(aws ssm send-command --instance-ids "$INSTANCE_ID" --document-name AWS-RunShellScript --parameters "{\"commands\":[\"$CMD\"]}" --query Command.CommandId --output text)
           STATUS=Pending
           for i in $(seq 1 90); do
