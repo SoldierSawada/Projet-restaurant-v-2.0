@@ -18,7 +18,7 @@ jobs:
       matrix:
         project: [backend, frontend]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Nom de l'image en minuscules
         run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}/${{ matrix.project }}" >> "$GITHUB_ENV"
       - uses: docker/login-action@v4
